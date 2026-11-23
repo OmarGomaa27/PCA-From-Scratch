@@ -1,0 +1,65 @@
+Data: n = 178, p = 13; rows removed: 0; missing values: 0
+
+======================================================================
+1. Raw vs standardized PCA (our functions)
+======================================================================
+RAW (covariance C)
+  eigenvalues   : [9.92017895e+04 1.72535300e+02 9.43810000e+00 4.99120000e+00
+ 1.22880000e+00 8.41100000e-01 2.79000000e-01 1.51400000e-01
+ 1.12100000e-01 7.17000000e-02 3.76000000e-02 2.11000000e-02
+ 8.20000000e-03]
+  ratios r_i    : [9.981e-01 1.700e-03 1.000e-04 1.000e-04 0.000e+00 0.000e+00 0.000e+00
+ 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00]
+  cumulative rho: [0.9981 0.9998 0.9999 1.     1.     1.     1.     1.     1.     1.
+ 1.     1.     1.    ]
+  power-iteration steps per PC: [ 6 11 40 20 77 26 47 90 60 46 48 29  3]
+  PC1 largest loadings: proline -1.000, magnesium -0.018, alcalinity_of_ash +0.005, color_intensity -0.002
+  PC2 largest loadings: magnesium +0.999, alcalinity_of_ash +0.026, proline -0.018, color_intensity +0.015
+STANDARDIZED (correlation R)
+  eigenvalues   : [4.7059 2.497  1.4461 0.919  0.8532 0.6417 0.551  0.3485 0.2889 0.2509
+ 0.2258 0.1688 0.1034]
+  ratios r_i    : [0.362  0.1921 0.1112 0.0707 0.0656 0.0494 0.0424 0.0268 0.0222 0.0193
+ 0.0174 0.013  0.008 ]
+  cumulative rho: [0.362  0.5541 0.6653 0.736  0.8016 0.851  0.8934 0.9202 0.9424 0.9617
+ 0.9791 0.992  1.    ]
+  power-iteration steps per PC: [ 45  48  60 330  92 163  53 141 170 239  93  55   2]
+  PC1 largest loadings: flavanoids -0.423, total_phenols -0.395, od280_od315 -0.376, proanthocyanins -0.313
+  PC2 largest loadings: color_intensity +0.530, alcohol +0.484, proline +0.365, ash +0.316
+  tr(R) = 13.0 (should be p = 13)
+
+======================================================================
+2. Library check (scikit-learn PCA, numpy correlation matrix)
+======================================================================
+raw eigenvalues vs sklearn       max|diff| = 2.91e-11   rel = 3.31e-16
+raw components vs sklearn        max|diff| = 2.10e-11   rel = 1.28e-11
+std eigenvalues vs sklearn       max|diff| = 2.66e-15   rel = 5.85e-16
+std components vs sklearn        max|diff| = 8.72e-12   rel = 7.67e-12
+std eigenvalues vs corrcoef      max|diff| = 2.22e-15   rel = 5.31e-16
+R vs numpy corrcoef              max|diff| = 1.11e-15   rel = 5.29e-16
+
+======================================================================
+3. Q4: multiply one variable (alcohol) by 1000
+======================================================================
+  C[alcohol, alcohol]: 0.6591 -> 659062.3   (ratio 1000000 = 1000^2)
+  C[alcohol, proline]: 164.5672 -> 164567.2   (ratio 1000 = 1000)
+  raw PC1 before: largest loading proline (0.9998), lambda_1 = 99201.8
+  raw PC1 after : largest loading alcohol (0.9649), lambda_1 = 703870.3
+standardized PCA: lambda unchanged max|diff| = 8.88e-16   rel = 2.36e-16
+standardized PCA: W unchanged    max|diff| = 1.67e-16   rel = 3.16e-16
+
+======================================================================
+4. Q5: scree plot and choice of k (standardized data)
+======================================================================
+  smallest k with rho_k >= 0.90: 8 (rho = 0.9202)
+  smallest k with rho_k >= 0.80: 5 (rho = 0.8016)
+  eigenvalues > 1 (above the average 1 = tr(R)/p): 3
+  first two PCs explain rho_2 = 0.5541
+  Saved figures/wine_scree.png
+
+======================================================================
+5. PC1-PC2 scores coloured by cultivar
+======================================================================
+  cultivar 1: mean PC1 = -2.276, mean PC2 = +0.965
+  cultivar 2: mean PC1 = +0.039, mean PC2 = -1.639
+  cultivar 3: mean PC1 = +2.740, mean PC2 = +1.238
+  Saved figures/wine_pc1_pc2.png

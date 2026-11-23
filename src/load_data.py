@@ -17,7 +17,6 @@ COLUMNS = [
 
 
 def load_wine(path=DATA_FILE):
-   
     df = pd.read_csv(path, header=None, names=COLUMNS)
     y = df["cultivar"]
     X = df.drop(columns="cultivar")
@@ -25,7 +24,6 @@ def load_wine(path=DATA_FILE):
 
 
 def describe(X, y):
-
     n, p = X.shape
     print(f"Rows (n): {n}    Columns (p): {p}\n")
 
@@ -69,7 +67,6 @@ def describe(X, y):
 
 
 def plot_boxplots(X, standardized, filename):
-
     data = X.to_numpy(dtype=float)
     if standardized:
         data = (data - data.mean(axis=0)) / data.std(axis=0, ddof=1)

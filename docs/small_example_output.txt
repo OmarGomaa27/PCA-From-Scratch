@@ -1,0 +1,69 @@
+================================================================
+Part A (Q1): step by step with exact fractions
+================================================================
+X =
+   [     13,      23 ]
+   [     21,      17 ]
+   [      1,       7 ]
+   [      9,       1 ]
+
+Step 1  xbar = (1/n) X^T 1
+xbar = [11, 12]
+
+Step 2  X_c = X - 1 xbar^T
+X_c =
+   [      2,      11 ]
+   [     10,       5 ]
+   [    -10,      -5 ]
+   [     -2,     -11 ]
+column sums of X_c (Definition 2: must be 0) = [0, 0]
+
+Step 4  C = (1/(n-1)) X_c^T X_c
+X_c^T X_c =
+   [    208,     144 ]
+   [    144,     292 ]
+C =
+   [  208/3,      48 ]
+   [     48,   292/3 ]
+C symmetric (Theorem 1(a)): True
+
+Step 5  characteristic polynomial  t^2 - tr(C) t + det(C) = 0
+   tr(C) = 500/3,  det(C) = 40000/9
+   t^2 - (500/3) t + (40000/9) = 0
+   discriminant = tr^2 - 4 det = 10000,  sqrt = 100
+   lambda_1 = 400/3,  lambda_2 = 100/3
+   lambda = 400/3:  (C - lambda I) w = 0  ->  w prop. to ['48', '64'],  ||.|| = 80,  unit w = ['3/5', '4/5']
+   lambda = 100/3:  (C - lambda I) w = 0  ->  w prop. to ['48', '-36'],  ||.|| = 60,  unit w = ['4/5', '-3/5']
+
+Step 7  r_1 = 4/5,  r_2 = 1/5   (sum = 1)
+
+Step 8  scores on PC1:  T = X_c w_1
+T = [10, 10, -10, -10]
+   variance of the scores = 400/3  (= lambda_1, Theorem 4)
+
+Second-way checks (substitute the answer back):
+   C w_1 = ['80', '320/3'],  lambda_1 w_1 = ['80', '320/3'],  equal: True
+   C w_2 = ['80/3', '-20'],  lambda_2 w_2 = ['80/3', '-20'],  equal: True
+   w_1 . w_2 = 0  (Theorem 5)
+   lambda_1 + lambda_2 = 500/3 = tr(C) = 500/3  (Theorem 8)
+
+================================================================
+Part B (Q2): the same components from the SVD of X_c
+================================================================
+eigenvalues of X_c^T X_c: sigma_1^2 = 400, sigma_2^2 = 100
+singular values: sigma_1 = 20, sigma_2 = 10
+u_1 = X_c v_1 / sigma_1 = [1/2, 1/2, -1/2, -1/2]
+u_2 = X_c v_2 / sigma_2 = [-1/2, 1/2, -1/2, 1/2]
+U^T U (must be I) =
+   [      1,       0 ]
+   [      0,       1 ]
+U Sigma V^T == X_c exactly: True
+lambda_i = sigma_i^2/(n-1): 400/3, 100/3  (same as Part A: 400/3, 100/3)
+
+================================================================
+Part C: methods.py on the same points (floating point)
+================================================================
+my_pca_power eigenvalues         max|diff| = 2.84e-14   rel = 2.31e-16
+my_pca_power W (aligned)         max|diff| = 2.70e-13   rel = 2.46e-13
+my_svd sigma                     max|diff| = 0.00e+00   rel = 0.00e+00
+my_scores on PC1                 max|diff| = 4.23e-13   rel = 4.22e-14

@@ -1,0 +1,41 @@
+======================================================================
+SIMULATION (assumptions hold by construction): n = 500, p = 3
+======================================================================
+A1 independence: lag-1 autocorrelation of PC1 scores : [0.018]
+     no-trend threshold 2/sqrt(group size): [0.089]
+A2 complete data: missing values = 0
+A3 n > p: 500 > 3 = True;  smallest eigenvalue = 1.0452 > 0: True;  condition number lambda_1/lambda_p = 8.3
+A4 linearity: 3 most correlated pairs, R^2 linear vs quadratic fit
+     x1 vs x2: r = +0.402, R^2 lin = 0.162, quad = 0.163, gain = 0.001
+     x1 vs x3: r = +0.208, R^2 lin = 0.043, quad = 0.047, gain = 0.004
+     x2 vs x3: r = +0.078, R^2 lin = 0.006, quad = 0.006, gain = 0.000
+A5 variance = structure: angle of w_i to the true direction: 1.40d, 1.36d, 0.57d
+A6 scales: s_j from 1.191 to 2.921, ratio max/min = 2.5;  all s_j > 0: True
+A7 distinct eigenvalues: relative gap (lambda_i - lambda_i+1)/lambda_i
+     gaps : 0.576 0.715
+     steps: 32 20 2
+     smallest gap: 0.576 between PC1 and PC2
+A8 outliers: entries with |z| > 3 = 5 (about 4.0 expected for normal data), rows flagged = 5
+     refit without flagged rows: angle change of PC1, PC2 = 0.82d, 0.74d;  lambda_1, lambda_2: 8.653 -> 8.125, 3.670 -> 3.486
+
+======================================================================
+WINE (standardized): n = 178, p = 13
+======================================================================
+A1 independence: lag-1 autocorrelation of PC1 scores (within each cultivar): [0.026 0.126 0.188]
+     no-trend threshold 2/sqrt(group size): [0.26  0.237 0.289]
+A2 complete data: missing values = 0
+A3 n > p: 178 > 13 = True;  smallest eigenvalue = 0.1034 > 0: True;  condition number lambda_1/lambda_p = 45.5
+A4 linearity: 3 most correlated pairs, R^2 linear vs quadratic fit
+     total_phenols vs flavanoids: r = +0.865, R^2 lin = 0.747, quad = 0.747, gain = 0.000
+     flavanoids vs od280_od315: r = +0.787, R^2 lin = 0.620, quad = 0.667, gain = 0.047
+     total_phenols vs od280_od315: r = +0.700, R^2 lin = 0.490, quad = 0.525, gain = 0.035
+A5 variance = structure: share of PC1 / PC2 variance explained by cultivar (eta^2): 0.800 / 0.722
+A6 scales: s_j from 0.124 to 314.907, ratio max/min = 2530.3;  all s_j > 0: True
+A7 distinct eigenvalues: relative gap (lambda_i - lambda_i+1)/lambda_i
+     gaps : 0.469 0.421 0.365 0.072 0.248 0.141 0.368 0.171 0.131 0.100 0.253 0.387
+     steps: 45 48 60 330 92 163 53 141 170 239 93 55 2
+     smallest gap: 0.072 between PC4 and PC5
+A8 outliers: entries with |z| > 3 = 11 (about 6.2 expected for normal data), rows flagged = 10
+     refit without flagged rows: angle change of PC1, PC2 = 3.51d, 6.02d;  lambda_1, lambda_2: 4.706 -> 5.047, 2.497 -> 2.616
+
+Saved figures/wine_scores_vs_index.png

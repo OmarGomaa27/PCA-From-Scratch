@@ -4,24 +4,23 @@ DS5020 Intro Linear Algebra & Probability — Final Project, Fall 2026
 
 Omar Gomaa
 
+Principal Component Analysis derived and implemented from scratch. The covariance matrix and
+its spectral decomposition, the Lagrange-multiplier derivation of the maximum-variance
+direction, the equivalence of the eigendecomposition and SVD routes and the explained-variance
+ratios are proved in the report; the same results are then implemented as NumPy code, one
+function per algorithm step, and checked three ways: against an exact four-point example in
+rational arithmetic, against a simulation whose true components are known, and against
+scikit-learn on the UCI Wine data.
+
 - Report: [`docs/PCA_From_Scratch.pdf`](docs/PCA_From_Scratch.pdf)
 - Overleaf (read-only): <https://www.overleaf.com/project/6af784b96729c38d6b66ca0e/share#ceda48968ce5ee71718743159a721c8fa10d77f0c626dac4>
 - Project plan: [`docs/Project Plan.xlsx`](docs/Project%20Plan.xlsx)
 
-## Project
-
-Principal Component Analysis derived and implemented from scratch: the covariance matrix
-and its spectral decomposition, the Lagrange-multiplier derivation of the maximum-variance
-direction, the equivalence of the eigendecomposition and SVD routes, and the
-explained-variance ratios. Iteration 2 covers the mathematics, the data description and a
-simulation with known truth; Iteration 3 applies the method to the Wine data with an
-eigensolver written by hand (power iteration with deflation).
-
 ## Data
 
 UCI Wine dataset (ID 109): <https://archive.ics.uci.edu/dataset/109/wine>.
-178 wines × 13 chemical measurements, no missing values. One row is one wine, one column is
-one measurement. The cultivar label (1–3) is not part of X and is used only to colour plots.
+178 wines × 13 chemical measurements, no missing values. One row is one wine, one column is one
+measurement. The cultivar label (1–3) is not part of X and is used only to colour plots.
 
 The raw file is small (10 KB) and is committed as `data/wine.data`, with the original UCI
 documentation in `data/wine.names`. To re-download it:
@@ -30,54 +29,58 @@ documentation in `data/wine.names`. To re-download it:
 curl -o data/wine.data https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data
 ```
 
-The dataset page above also offers the same data as a zip
-(`https://archive.ics.uci.edu/static/public/109/wine.zip`), which contains `wine.data` and
-`wine.names`. Both URLs were verified on 14 November 2026.
+## Requirements
+
+Python 3 with `numpy`, `pandas` and `matplotlib`. `scikit-learn` is used only to verify results,
+never to compute them:
+
+```bash
+pip install numpy pandas matplotlib scikit-learn
+```
 
 ## Structure
 
 ```
-src/        data loading and simulation scripts
+src/        implementation and scripts
 data/       raw data (wine.data, wine.names, Index)
 figures/    generated plots
 docs/       report PDF, project plan, script output logs
 ```
 
-## Requirements
-
-Python 3.11+ with `numpy`, `pandas` and `matplotlib`:
-
-```bash
-pip install numpy pandas matplotlib
-```
+`src/methods.py` holds the implementation: one `my_` function per numbered step of the algorithm
+in the report, written with NumPy arrays and matrix products only, with the equation it computes
+in a comment above it. Norms are computed as `sqrt(u @ u)`, eigenpairs by power iteration with
+deflation. `numpy.linalg`, `numpy.corrcoef` and scikit-learn appear only in checking code. All
+randomness goes through `np.random.default_rng(seed)` with seed 0, so every run reproduces the
+numbers in the report and in `docs/*_output.txt`.
 
 ## Running
 
-From the project root:
+Run each script from the project root.
+
+| Command | What it does | Produces |
+| --- | --- | --- |
+| `python src/load_data.py` | Iteration 2: describes the Wine data (size, types, missing values, summary statistics, variance shares, outliers) and draws the raw and standardized boxplots | `figures/wine_boxplot_raw.png`, `figures/wine_boxplot_standardized.png` |
+| `python src/simulate.py` | The simulation model as a function, `simulate_pca(n, seed)`; run directly it is a quick reproduction check against the Iteration 2 estimates | — |
+| `python src/small_example.py` | The four-point worked example, step by step in exact fractions, with the second-way checks and a floating-point comparison | — |
+| `python src/check_simulation.py` | Simulation test: truth check at n = 50, 500, 5000, scikit-learn comparison, error against n, stress test with equal true variances | `figures/check_sim_error_vs_n.png` |
+| `python src/run_real.py` | Wine data: raw versus standardized PCA, the ×1000 rescaling demonstration, scikit-learn comparison, scree plot and scores | `figures/wine_scree.png`, `figures/wine_pc1_pc2.png` |
+| `python src/check_assumptions.py` | Checks every assumption on the simulation first, then on Wine | `figures/wine_scores_vs_index.png` |
+
+Each script prints its results; the saved logs in `docs/` were produced by redirecting that
+output:
 
 ```bash
-python src/load_data.py > docs/data_summary.txt
+python src/run_real.py > docs/run_real_output.txt
 ```
 
-Prints the data summary (size, types, missing values, summary statistics, variance shares,
-outlier counts) and writes
-`figures/wine_boxplot_raw.png` and `figures/wine_boxplot_standardized.png`.
+On Windows, PowerShell's `>` writes UTF-16 with a byte-order mark. To keep the logs as UTF-8,
+either run the command from Git Bash as above, or in PowerShell use:
 
 ```bash
-python src/simulation.py > docs/simulation_output.txt
+$env:PYTHONIOENCODING="utf-8"; python src/run_real.py | Out-File -Encoding utf8 docs/run_real_output.txt
 ```
 
-Runs the known-truth simulation at n = 50, 500 and 5000, checking each derivation
-numerically, then repeats 200 times at each of seven sample sizes to show the error shrinking
-with n. The plot is
-`figures/sim_error_vs_n.png`. All randomness uses `np.random.default_rng(0)`, so the numbers
-reproduce exactly.
-
-## Simulation with known truth
-
-Data are drawn from N(0, Σ) in p = 3 dimensions with Σ = Q diag(9, 4, 1) Qᵀ for a random
-orthogonal Q, so the true principal directions and variances are known. The run confirms that
-C is symmetric and positive semi-definite, that the variance along w₁ equals λ₁, that
-WᵀW = I, that the SVD and eigendecomposition agree, and that tr(C) = Σλᵢ — each to machine
-precision. The mean relative eigenvalue error follows the theoretical 2/√(πn) curve, with a
-fitted log–log slope of −0.500.
+The logs in `docs/` are `data_summary.txt`, `small_example_output.txt`,
+`check_simulation_output.txt`, `run_real_output.txt` and `check_assumptions_output.txt`
+(`simulation_output.txt` is the Iteration 2 log, kept for reference).
