@@ -12,9 +12,14 @@ function per algorithm step, and checked three ways: against an exact four-point
 rational arithmetic, against a simulation whose true components are known, and against
 scikit-learn on the UCI Wine data.
 
-- Report: [`docs/PCA_From_Scratch.pdf`](docs/PCA_From_Scratch.pdf)
-- Overleaf (read-only): <https://www.overleaf.com/project/6af784b96729c38d6b66ca0e/share#ceda48968ce5ee71718743159a721c8fa10d77f0c626dac4>
-- Project plan: [`docs/Project Plan.xlsx`](docs/Project%20Plan.xlsx)
+Reports (Iteration 3 contains all of Iteration 2, plus the implementation and its verification):
+
+| Iteration | PDF | Overleaf (read-only) |
+| --- | --- | --- |
+| 3 | [`docs/PCA_From_Scratch_i3.pdf`](docs/PCA_From_Scratch_i3.pdf) | <https://www.overleaf.com/project/6b02749a143915e4ba732f2a/share#f940cb5a558fa0c6e98990e613fb4392c2ccd5898fedc843> |
+| 2 | [`docs/PCA_From_Scratch_i2.pdf`](docs/PCA_From_Scratch_i2.pdf) | <https://www.overleaf.com/project/6af784b96729c38d6b66ca0e/share#ceda48968ce5ee71718743159a721c8fa10d77f0c626dac4> |
+
+Project plan: [`docs/Project Plan.xlsx`](docs/Project%20Plan.xlsx)
 
 ## Data
 
@@ -44,7 +49,7 @@ pip install numpy pandas matplotlib scikit-learn
 src/        implementation and scripts
 data/       raw data (wine.data, wine.names, Index)
 figures/    generated plots
-docs/       report PDF, project plan, script output logs
+docs/       report PDFs, project plan, script output logs
 ```
 
 `src/methods.py` holds the implementation: one `my_` function per numbered step of the algorithm
